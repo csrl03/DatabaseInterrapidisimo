@@ -199,4 +199,6 @@ def eliminar_rastreo(id_rastreo):
     return jsonify({'status': 'ok'})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Railway asigna automáticamente el puerto
+    app.run(host='0.0.0.0', port=port)
+   
