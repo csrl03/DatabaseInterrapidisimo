@@ -1,4 +1,3 @@
-import os
 import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -35,10 +34,13 @@ def init_db():
             destino_ciudad TEXT,
             destino_nombre TEXT,
             destino_direccion TEXT,
+            destino_cedula TEXT,
+            destino_telefono TEXT,
             origen_ciudad TEXT,
             origen_nombre TEXT,
             origen_direccion TEXT,
             origen_telefono TEXT,
+            origen_cedula TEXT,
             empaque TEXT,
             actualizaciones TEXT
         )
@@ -139,13 +141,13 @@ def crear_rastreo():
     data = request.json
     campos = [
         'numero_guia', 'documento', 'admision', 'estimada', 'destino_ciudad', 'destino_nombre',
-        'destino_direccion', 'origen_ciudad', 'origen_nombre', 'origen_direccion',
-        'origen_telefono', 'empaque', 'actualizaciones'
+        'destino_direccion', 'destino_cedula', 'destino_telefono', 'origen_ciudad', 'origen_nombre', 'origen_direccion',
+        'origen_telefono', 'origen_cedula', 'empaque', 'actualizaciones'
     ]
     valores = [data.get(campo) for campo in campos]
     conn = sqlite3.connect('data.db')
     c = conn.cursor()
-    c.execute('''INSERT INTO rastreos (numero_guia, documento, admision, estimada, destino_ciudad, destino_nombre, destino_direccion, origen_ciudad, origen_nombre, origen_direccion, origen_telefono, empaque, actualizaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', valores)
+    c.execute('''INSERT INTO rastreos (numero_guia, documento, admision, estimada, destino_ciudad, destino_nombre, destino_direccion, destino_cedula, destino_telefono, origen_ciudad, origen_nombre, origen_direccion, origen_telefono, origen_cedula, empaque, actualizaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)''', valores)
     conn.commit()
     conn.close()
     return jsonify({'status': 'ok'}), 201
@@ -168,12 +170,15 @@ def obtener_rastreos_por_documento(documento):
             'destino_ciudad': row[5],
             'destino_nombre': row[6],
             'destino_direccion': row[7],
-            'origen_ciudad': row[8],
-            'origen_nombre': row[9],
-            'origen_direccion': row[10],
-            'origen_telefono': row[11],
-            'empaque': row[12],
-            'actualizaciones': row[13]
+            'destino_cedula': row[8],
+            'destino_telefono': row[9],
+            'origen_ciudad': row[10],
+            'origen_nombre': row[11],
+            'origen_direccion': row[12],
+            'origen_telefono': row[13],
+            'origen_cedula': row[14],
+            'empaque': row[15],
+            'actualizaciones': row[16]
         })
     return jsonify(rastreos)
 
@@ -199,7 +204,10 @@ def eliminar_rastreo(id_rastreo):
     conn.close()
     return jsonify({'status': 'ok'})
 
+@app.route('/')
+def index():
+    return 'API online'
+
 if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Railway asigna automáticamente el puerto
-    app.run(host='0.0.0.0', port=port)
-   
+    init_db()
+    app.run(debug=True)
