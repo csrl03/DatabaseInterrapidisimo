@@ -171,15 +171,15 @@ def obtener_rastreos_por_documento(documento):
             'destino_ciudad': row[5],
             'destino_nombre': row[6],
             'destino_direccion': row[7],
-            'destino_cedula': row[8],
-            'destino_telefono': row[9],
-            'origen_ciudad': row[10],
-            'origen_nombre': row[11],
-            'origen_direccion': row[12],
-            'origen_telefono': row[13],
-            'origen_cedula': row[14],
-            'empaque': row[15],
-            'actualizaciones': row[16]
+            'origen_ciudad': row[8],
+            'origen_nombre': row[9],
+            'origen_direccion': row[10],
+            'origen_telefono': row[11],
+            'empaque': row[12],
+            'actualizaciones': row[13],
+            'destino_cedula': row[14],
+            'destino_telefono': row[15],
+            'origen_cedula': row[16]
         })
     return jsonify(rastreos)
 
@@ -200,15 +200,15 @@ def obtener_rastreo_por_guia(numero_guia):
             'destino_ciudad': row[5],
             'destino_nombre': row[6],
             'destino_direccion': row[7],
-            'destino_cedula': row[8],
-            'destino_telefono': row[9],
-            'origen_ciudad': row[10],
-            'origen_nombre': row[11],
-            'origen_direccion': row[12],
-            'origen_telefono': row[13],
-            'origen_cedula': row[14],
-            'empaque': row[15],
-            'actualizaciones': row[16]
+            'origen_ciudad': row[8],
+            'origen_nombre': row[9],
+            'origen_direccion': row[10],
+            'origen_telefono': row[11],
+            'empaque': row[12],
+            'actualizaciones': row[13],
+            'destino_cedula': row[14],
+            'destino_telefono': row[15],
+            'origen_cedula': row[16]
         })
     else:
         return jsonify({'error': 'Rastreo no encontrado'}), 404
