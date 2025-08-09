@@ -1,3 +1,4 @@
+import os
 import sqlite3
 from flask import Flask, request, jsonify
 from flask_cors import CORS
@@ -182,6 +183,36 @@ def obtener_rastreos_por_documento(documento):
         })
     return jsonify(rastreos)
 
+@app.route('/rastreo/<numero_guia>', methods=['GET'])
+def obtener_rastreo_por_guia(numero_guia):
+    conn = sqlite3.connect('data.db')
+    c = conn.cursor()
+    c.execute('SELECT * FROM rastreos WHERE numero_guia = ?', (numero_guia,))
+    row = c.fetchone()
+    conn.close()
+    if row:
+        return jsonify({
+            'id': row[0],
+            'numero_guia': row[1],
+            'documento': row[2],
+            'admision': row[3],
+            'estimada': row[4],
+            'destino_ciudad': row[5],
+            'destino_nombre': row[6],
+            'destino_direccion': row[7],
+            'destino_cedula': row[8],
+            'destino_telefono': row[9],
+            'origen_ciudad': row[10],
+            'origen_nombre': row[11],
+            'origen_direccion': row[12],
+            'origen_telefono': row[13],
+            'origen_cedula': row[14],
+            'empaque': row[15],
+            'actualizaciones': row[16]
+        })
+    else:
+        return jsonify({'error': 'Rastreo no encontrado'}), 404
+
 @app.route('/rastreos/actualizacion/<int:id_rastreo>', methods=['PUT'])
 @token_required
 def actualizar_actualizaciones(id_rastreo):
@@ -204,10 +235,7 @@ def eliminar_rastreo(id_rastreo):
     conn.close()
     return jsonify({'status': 'ok'})
 
-@app.route('/')
-def index():
-    return 'API online'
-
 if __name__ == '__main__':
-    init_db()
-    app.run(debug=True)
+    port = int(os.environ.get('PORT', 5000))  # Railway asigna automáticamente el puerto
+    app.run(host='0.0.0.0', port=port)
+   
